@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.json": "cpp",
+        "msg.h": "c",
+        "semaphore.h": "c",
+        "bufferdata.h": "c"
+    }
+}
