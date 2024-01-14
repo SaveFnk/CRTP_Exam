@@ -1,5 +1,5 @@
-
 #include "BufferData.h"
+#include <stdio.h>
 
 int consumerCount[MAX_PROCESSES];
 int producerCount = 0;
@@ -9,29 +9,24 @@ static void actor(struct BufferData *sharedBuf, int msgId)
     int item;
     while (1)
     {
-        printf("actoraa");
-        sem_wait(&sharedBuf->actorSem); // 1->0
+        sem_wait(&sharedBuf->actorSem); // actor semaphore: 1 --> 0
         printf("actor");
-        struct msqid_ds info;
 
+        struct msqid_ds info;
         msgctl(msgId, IPC_STAT, &info);
 
-        printf("last user: %l", info.msg_lrpid);
+        printf("Queue state:\n");
 
-        // queue.len()
+        printf("# messages in queue: %ld\n", info.msg_qnum);
+        printf("Space: %ld kB |", (long)info.msg_cbytes/1000);
 
-        /*int ID = sharedBuf->ID; // read the ID
-        if (ID == -1)
-        {
-            // producer
-            producerCount++;
-        }
-        else
-        {
-            // consumer
-            consumerCount[ID]++;
-        }*/
+        int ratio = (info.msg_cbytes / info.msg_qbytes) * 10;
+        for (int i = 0; i < 10; i++) { i < ratio ? printf("█") : printf("░"); }
+        printf("| /%ld kB\n", (long)info.msg_qbytes/1000);
 
-        sem_post(&sharedBuf->mutexSem); // 0->1
+        printf("Last user PID: %d\n", info.msg_lrpid);
+
+
+        sem_post(&sharedBuf->mutexSem); // mutex semaphore: 0 --> 1
     }
 }

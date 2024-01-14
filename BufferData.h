@@ -1,22 +1,38 @@
-#pragma once
-#include <semaphore.h>
-#include <sys/msg.h>
+//#pragma once
+#ifndef BUFFERDATA_H
+#define BUFFERDATA_H
 
-#define BUFFER_SIZE 50
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <string.h>
+
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/msg.h>
+#include <sys/mman.h>
+#include <sys/socket.h>
+
+#include <semaphore.h>
+#include <pthread.h>
+
+#include <netdb.h>
+#include <netinet/in.h>
+
 #define EMPTY 0
-#define MAX_PROCESSES 5
+#define MAX_PROCESSES 10
+#define BUFFER_SIZE 256
+
 
 struct msgbuf
 {
     long mtype;
-    int item;
+    int item;//[MAX_PROCESSES];
 };
-/*
-struct msqid_ds
-{
-    long msg_lrpid; // process ID of last msgrcv()
-};*/
 
+/* Buffer of semaphores */
 struct BufferData
 {
     // int readIdx;
@@ -28,3 +44,6 @@ struct BufferData
     sem_t roomAvailableSem;
     sem_t actorSem;
 };
+
+
+#endif
