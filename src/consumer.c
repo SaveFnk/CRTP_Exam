@@ -1,7 +1,8 @@
 //#pragma once
-#include "BufferData.h"
+#include "../headers/BufferData.h"
+#include "../headers/Utils.h"
 
-static void consumer(struct BufferData *sharedBuf, int ID, int bufId)
+ void consumer(struct BufferData *sharedBuf, int ID, int bufId)
 {
     int item;
     int retSize;

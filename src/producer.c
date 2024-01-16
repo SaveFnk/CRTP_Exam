@@ -1,10 +1,11 @@
 //#pragma once
-#include "BufferData.h"
+#include "../headers/BufferData.h"
+#include "../headers/Utils.h"
 //  roomAvailableSem=1
 //  dataAvailableSem=0
 //  mutexSem=1
 
-static void producer(struct BufferData *sharedBuf, int bufId) {
+void producer(struct BufferData *sharedBuf, int bufId) {
   int item = 0;
   struct msgbuf msg;
   msg.mtype = 1;

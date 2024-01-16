@@ -2,18 +2,15 @@
 
 //#pragma once
 
-#include "BufferData.h"
+#include "../headers/BufferData.h"
+#include "../headers/Utils.h"
 
-#define FALSE 0
-#define TRUE 1
+#include <stdio.h>
 
-int consumerCount[MAX_PROCESSES];
-int producerCount = 0;
-
-static void actor(struct BufferData *sharedBuf, int bufId, int nConsumers, char *act) {
+void client(struct BufferData *sharedBuf, int bufId, int nConsumers, char *act) {
 
   // CLIENT
-  char hostname[9] = "127.0.0.1";
+  char *hostname = "127.0.0.1";
   //int stopped = FALSE;
   int port = 8080;
   int sd;
@@ -23,12 +20,30 @@ static void actor(struct BufferData *sharedBuf, int bufId, int nConsumers, char 
   struct sockaddr_in sin;
   struct hostent *hp;
 
-  /* Resolve the passed name and store the resulting long representation
-    in the struct hostent variable */
-  if ((hp = gethostbyname(hostname)) == 0) {
-    perror("gethostbyname");
-    exit(1);
-  }
+
+    /* Convert the IP address to network byte order */
+    in_addr_t addr = inet_addr(hostname);
+    if (addr == INADDR_NONE) {
+      perror("inet_addr");
+      exit(1);
+    }
+
+    /* Resolve the passed address and store the resulting long representation
+        in the struct hostent variable */
+    if ((hp = gethostbyaddr((const void *)&addr, sizeof(addr), AF_INET)) == NULL) {
+      perror("gethostbyaddr");
+      fprintf(stderr, "h_errno: %d\n", h_errno);
+      exit(1);
+    }
+
+  // /* Resolve the passed name and store the resulting long representation
+  //   in the struct hostent variable */
+  // if ((hp = gethostbyname(hostname)) == 0) {
+  //   perror("gethostbyname");
+  //   fprintf(stderr, "h_errno: %d\n", h_errno);
+  //   exit(1);
+  //   exit(1);
+  // }
   /* fill in the socket structure with host information */
   memset(&sin, 0, sizeof(sin));
   sin.sin_family = AF_INET;

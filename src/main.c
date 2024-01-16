@@ -1,7 +1,6 @@
-#include "BufferData.h"
-#include "client.c"
-#include "producer.c"
-#include "consumer.c"
+#include "../headers/BufferData.h"
+#include "../headers/Utils.h"
+
 /* Helper function using during developement to know semaphores status */
 void getValues(struct BufferData buf){
     int m, d, r, a;
@@ -69,7 +68,7 @@ int main(int argc, char *args[]) {
     pids[1] = fork();
     if (pids[1] == 0) {
         /* Processo figlio */
-        actor(sharedBuf, bufId, nConsumers,act);
+        client(sharedBuf, bufId, nConsumers,act);
         exit(0);
         printf("Eliminato attore\n");
     }

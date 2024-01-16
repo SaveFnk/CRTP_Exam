@@ -85,11 +85,11 @@ int main(int argc, char *argv[]) {
   if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuse,
                  sizeof(reuse)) < 0)
     perror("setsockopt(SO_REUSEADDR) failed");
-#ifdef SO_REUSEPORT
+
   if (setsockopt(sd, SOL_SOCKET, SO_REUSEPORT, (const char *)&reuse,
                  sizeof(reuse)) < 0)
     perror("setsockopt(SO_REUSEPORT) failed");
-#endif
+
   /* Initialize the address (struct sokaddr_in) fields */
   memset(&sin, 0, sizeof(sin));
   sin.sin_family = AF_INET;

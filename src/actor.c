@@ -1,10 +1,8 @@
-#include "BufferData.h"
+#include "../headers/BufferData.h"
+#include "../headers/Utils.h"
 #include <stdio.h>
 
-int consumerCount[MAX_PROCESSES];
-int producerCount = 0;
-
-static void actor(struct BufferData *sharedBuf, int msgId)
+void actor(struct BufferData *sharedBuf, int msgId)
 {
     int item;
     while (1)
